@@ -15,8 +15,8 @@ public class Card implements Serializable{
         return value;
     }
 
-    public void setValue(char deger) {
-        this.value = deger;
+    public void setValue(char value) {
+        this.value = value;
     }
 
     public boolean isGuess() {
