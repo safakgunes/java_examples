@@ -12,18 +12,10 @@ import java.util.logging.Logger;
 public class Connect {
 
     private String user_name = "root";
-    //    private String password = "root";
-    private String password = "";
-
-
-
-    //    private String db_name = "mydb";
-    private String db_name = "demo";
-
+    private String password = "root";
+    private String db_name = "mydb";
     private String host =  "localhost";
-
-    //    private int port = 3306;
-    private int port = 3307;
+    private int port = 3306;
 
 
     private Connection con = null;
@@ -31,24 +23,24 @@ public class Connect {
     private Statement statement = null;
     private PreparedStatement preparedStatement = null;
 
-    public void preparedCalisanlariGetir(int id) {
+    public void preparedGetEmployee(int id) {
 
-        String sorgu = "Select * From calisanlar where id > ? and ad like ? ";
+        String query = "Select * From employees where id > ? and name like ? ";
 
 
         try {
-            preparedStatement = con.prepareStatement(sorgu);
+            preparedStatement = con.prepareStatement(query);
             preparedStatement.setInt(1, id);
-            preparedStatement.setString(2,"M%");
+            preparedStatement.setString(2,"S%");
 
 
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                String ad  = rs.getString("ad");
-                String soyad = rs.getString("soyad");
+                String name  = rs.getString("name");
+                String surname = rs.getString("surname");
                 String email =  rs.getString("email");
 
-                System.out.println("Ad : " + ad + " Soyad : " + soyad + " Email : " + email);
+                System.out.println("Name : " + name + " Surname : " + surname + " Email : " + email);
 
 
 
@@ -60,24 +52,19 @@ public class Connect {
         }
 
 
-
-
-
-
     }
-    public void calisanEkle() {
-
+    public void addEmployee() {
 
 
         try {
             statement = con.createStatement();
-            String ad = "Semih";
-            String soyad = "Aktaş";
-            String email =  "semihaktas@gmail.com";
-            // Insert Into calisanlar (ad,soyad,email) VALUES('Yusuf','Çetinkaya','mucahit@gmail.com')
-            String sorgu = "Insert Into calisanlar (ad,soyad,email) VALUES(" + "'" + ad + "'," + "'" + soyad + "'," + "'" + email + "')";
+            String name = "Safak";
+            String surname = "Gunes";
+            String email =  "safakgunes@gmail.com";
+            // Insert Into employees (name,surname,email) VALUES('Safak','Gunes','safak@gmail.com')
+            String query = "Insert Into employees (name,surname,email) VALUES(" + "'" + name + "'," + "'" + surname + "'," + "'" + email + "')";
 
-            statement.executeUpdate(sorgu);
+            statement.executeUpdate(query);
 
 
 
@@ -88,14 +75,14 @@ public class Connect {
 
     }
 
-    public void calisanSil() {
+    public void deleteEmployee() {
 
         try {
             statement = con.createStatement();
 
-            String sorgu = "Delete from calisanlar where id > 3";
+            String query = "Delete from employees where id > 3";
 
-            int deger = statement.executeUpdate(sorgu);
+            int deger = statement.executeUpdate(query);
             System.out.println(deger + " kadar veri etkilendi...");
 
 
@@ -105,15 +92,15 @@ public class Connect {
 
 
     }
-    public void calisanGuncelle() {
+    public void updateEmployee() {
 
 
         try {
             statement = con.createStatement();
 
-            String sorgu = "Update calisanlar Set email = 'example@gmail.com' where id > 3";
+            String query = "Update employees Set email = 'example@gmail.com' where id > 3";
 
-            statement.executeUpdate(sorgu);
+            statement.executeUpdate(query);
 
         } catch (SQLException ex) {
             Logger.getLogger(Connect.class.getName()).log(Level.SEVERE, null, ex);
@@ -121,23 +108,23 @@ public class Connect {
 
 
     }
-    public void calisanlariGetir() {
+    public void getEmployee() {
 
-        String sorgu = "Select * From calisanlar";
+        String query = "Select * From employees";
 
         try {
             statement = con.createStatement();
 
-            ResultSet rs = statement.executeQuery(sorgu);
+            ResultSet rs = statement.executeQuery(query);
 
             while (rs.next()) {
 
                 int id = rs.getInt("id");
-                String ad = rs.getString("ad");
-                String soyad = rs.getString("soyad");
+                String name = rs.getString("name");
+                String surname = rs.getString("surname");
                 String email = rs.getString("email");
 
-                System.out.println("Id : " + id + " Ad: " + ad + " Soyad : " + soyad + " Email : " + email);
+                System.out.println("Id : " + id + " Name: " + name + " Surname : " + surname + " Email : " + email);
 
 
             }
@@ -152,7 +139,7 @@ public class Connect {
     }
     public Connect() {
 
-        // "jbdc:mysql://localhost:3306/demo"
+        // "jbdc:mysql://localhost:3306/mydb"
         String url = "jdbc:mysql://" + host + ":" + port + "/" + db_name+ "?useUnicode=true&characterEncoding=utf8";
 
 
@@ -178,20 +165,13 @@ public class Connect {
     }
     public static void main(String[] args) {
         Connect connect = new Connect();
-        //connect.preparedCalisanlariGetir(1);
 
-        /*System.out.println("Silinmeden Önce........");
-        Connect.calisanlariGetir();
-        System.out.println("********************************************");
-        System.out.println("Silindikten Sonra........");
-        //Connect.calisanGuncelle();
-        Connect.calisanSil();*/
 
-        connect.calisanlariGetir();
-
-        //Connect.calisanEkle();
-        //Connect.calisanlariGetir();
-
+        //connect.preparedGetEmployee(1);
+        connect.getEmployee();
+        //connect.updateEmployee();
+        //connect.deleteEmployee();
+        //connect.addEmployee();
 
 
     }
